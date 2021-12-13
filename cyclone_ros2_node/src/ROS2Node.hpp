@@ -11,11 +11,11 @@
 
 #include <rcl_interfaces/msg/parameter_event.hpp>
 
-#include <cyclone_ros2_msgs/msg/int_number.hpp>
+#include <cyclone_ros2_msgs/msg/msg.hpp>
 
 #include <cyclone_bridge/ROS2Bridge.hpp>
 
-#include <cyclone_bridge/messages/IntNumber.hpp>
+#include <cyclone_bridge/messages/Msg.hpp>
 
 #include "ROS2NodeConfig.hpp"
 
@@ -48,8 +48,8 @@ public:
 
 private:
 
-  rclcpp::Publisher<cyclone_ros2_msgs::msg::IntNumber>::SharedPtr
-      ros1_to_ros2_num_pub;
+  rclcpp::Publisher<cyclone_ros2_msgs::msg::Msg>::SharedPtr
+      ros1_to_ros2_msg_pub;
 
   rclcpp::CallbackGroup::SharedPtr read_callback_group;
 
@@ -69,6 +69,8 @@ private:
   void start(Fields fields);
 
   uint32_t return_number;
+
+  std::string return_string;
 
 };
 

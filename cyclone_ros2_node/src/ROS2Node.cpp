@@ -51,22 +51,24 @@ void ROS2Node::start(Fields _fields)
       std::chrono::milliseconds(10), std::bind(&ROS2Node::read, this),
       read_callback_group);
 
-  ros1_to_ros2_num_pub =
-      create_publisher<cyclone_ros2_msgs::msg::IntNumber>(
+  ros1_to_ros2_msg_pub =
+      create_publisher<cyclone_ros2_msgs::msg::Msg>(
           ros2_node_config.ros1_to_ros2_topic, 10);
 }
 
 void ROS2Node::read()
 {
-  messages::IntNumber ros1_to_ros2_num;
-  if (fields.ros2_bridge->read(ros1_to_ros2_num))
+  messages::Msg ros1_to_ros2_msg;
+  if (fields.ros2_bridge->read(ros1_to_ros2_msg))
   {
-    cyclone_ros2_msgs::msg::IntNumber new_num;
-    new_num.int_num = ros1_to_ros2_num.int_num;
-    
-    return_number = new_num.int_num;
-    
-    ros1_to_ros2_num_pub->publish(new_num);
+    cyclone_ros2_msgs::msg::Msg new_msg;
+    new_msg.cnt.int_num = ros1_to_ros2_msg.cnt.int_num;
+    new_msg.messages.messages = ros1_to_ros2_msg.messages.messages;
+
+    return_number = new_msg.cnt.int_num;
+    return_string = new_msg.messages.messages;
+
+    ros1_to_ros2_msg_pub->publish(new_msg);
 
     send();
   }
@@ -74,11 +76,11 @@ void ROS2Node::read()
 
 void ROS2Node::send()
 {
-  std::cout << "send" << std::endl;
-  messages::IntNumber ros2_to_ros1_num;
-  ros2_to_ros1_num.int_num = return_number;
+  messages::Msg ros2_to_ros1_msg;
+  ros2_to_ros1_msg.cnt.int_num = return_number;
+  ros2_to_ros1_msg.messages.messages = return_string;
 
-  fields.ros2_bridge->send(ros2_to_ros1_num);
+  fields.ros2_bridge->send(ros2_to_ros1_msg);
 }
 
 

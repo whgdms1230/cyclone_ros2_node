@@ -23,6 +23,8 @@ if (ament_cmake_FOUND)
 
   rosidl_generate_interfaces(cyclone_ros2_msgs
     "msg/IntNumber.msg"
+    "msg/StrString.msg"
+    "msg/Msg.msg"
     DEPENDENCIES std_msgs
   )
 
